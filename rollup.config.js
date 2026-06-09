@@ -12,7 +12,7 @@ if you want to view the source visit the plugins github repository
 `;
 
 export default {
-  input: 'main.ts',
+  input: 'src/main.ts',
   output: {
     dir: '.',
     sourcemap: 'inline',
@@ -21,7 +21,7 @@ export default {
     exports: 'default',
     banner,
   },
-  external: ['obsidian', '@codemirror/state', '@codemirror/view', '@codemirror/rangeset'],
+  external: ['obsidian', '@codemirror/language', '@codemirror/state', '@codemirror/view', '@codemirror/rangeset'],
   plugins: [
     typescript(),
     nodeResolve({ browser: true }),

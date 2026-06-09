@@ -1,0 +1,8 @@
+.markdown-furigana-ruby {
+  ruby-align: center;
+}
+
+.markdown-furigana-ruby rt {
+  font-size: 0.6em;
+  user-select: none;
+}
