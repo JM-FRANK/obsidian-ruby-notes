@@ -49,7 +49,7 @@ function buildDecorations(view: EditorView, settings: FuriganaSettings): Decorat
     let line = view.state.doc.lineAt(range.from);
 
     while (line.from <= range.to) {
-      if (line.to >= range.from && (settings.renderOnActiveLine || !intersectsSelectionLine(line.from, line.to, view))) {
+      if (line.to >= range.from) {
         addLineDecorations(builder, view, line.text, line.from);
       }
 
@@ -95,10 +95,6 @@ function isLivePreview(view: EditorView): boolean {
 
 function intersectsSelection(from: number, to: number, view: EditorView): boolean {
   return view.state.selection.ranges.some((range) => range.from <= to && range.to >= from);
-}
-
-function intersectsSelectionLine(lineFrom: number, lineTo: number, view: EditorView): boolean {
-  return view.state.selection.ranges.some((range) => range.from <= lineTo && range.to >= lineFrom);
 }
 
 function isInExcludedSyntax(view: EditorView, from: number, to: number): boolean {

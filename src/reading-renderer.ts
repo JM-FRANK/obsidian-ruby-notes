@@ -2,7 +2,7 @@ import type { FuriganaSettings } from "./settings";
 import { parseFurigana } from "./parser";
 import { createRubyElement } from "./ruby-widget";
 
-const SKIPPED_TAGS = new Set(["code", "pre", "script", "style", "ruby", "textarea"]);
+const SKIPPED_TAGS = new Set(["code", "pre", "ruby", "rt", "script", "style", "textarea"]);
 
 export function renderFuriganaInReadingView(root: HTMLElement, settings: FuriganaSettings): void {
   if (!settings.enableReadingView) {
