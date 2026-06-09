@@ -1,6 +1,6 @@
 import { Plugin } from "obsidian";
 import { createFuriganaLivePreviewExtension } from "./live-preview-extension";
-import { renderFuriganaInReadingView } from "./reading-renderer";
+import { createFuriganaReadingViewChild } from "./reading-renderer";
 import { DEFAULT_SETTINGS, FuriganaSettings } from "./settings";
 
 export default class MarkdownFurigana extends Plugin {
@@ -9,8 +9,8 @@ export default class MarkdownFurigana extends Plugin {
   async onload(): Promise<void> {
     await this.loadSettings();
 
-    this.registerMarkdownPostProcessor((el) => {
-      renderFuriganaInReadingView(el, this.settings);
+    this.registerMarkdownPostProcessor((el, ctx) => {
+      ctx.addChild(createFuriganaReadingViewChild(el, () => this.settings));
     });
 
     this.registerEditorExtension(createFuriganaLivePreviewExtension(() => this.settings));
