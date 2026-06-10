@@ -5,6 +5,10 @@ import { createRubyElement } from "./ruby-widget";
 
 const SKIPPED_TAGS = new Set(["code", "pre", "ruby", "rt", "rp", "script", "style", "textarea", "input"]);
 
+type RenderDomOptions = {
+  allowInsideCmEditor: boolean;
+};
+
 export function createFuriganaReadingViewChild(
   root: HTMLElement,
   getSettings: () => FuriganaSettings,
@@ -88,12 +92,24 @@ export function renderFuriganaInReadingView(root: HTMLElement, settings: Furigan
     return;
   }
 
+  renderFuriganaInDomRoot(root, { allowInsideCmEditor: false });
+}
+
+export function renderFuriganaInExternalWidget(root: HTMLElement, settings: FuriganaSettings): void {
+  if (!settings.enableLivePreview) {
+    return;
+  }
+
+  renderFuriganaInDomRoot(root, { allowInsideCmEditor: true });
+}
+
+function renderFuriganaInDomRoot(root: HTMLElement, options: RenderDomOptions): void {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
   const nodes: Text[] = [];
 
   while (walker.nextNode()) {
     const node = walker.currentNode as Text;
-    if (!shouldSkipTextNode(node)) {
+    if (!shouldSkipTextNode(node, options)) {
       nodes.push(node);
     }
   }
@@ -101,13 +117,13 @@ export function renderFuriganaInReadingView(root: HTMLElement, settings: Furigan
   nodes.forEach(replaceTextNode);
 }
 
-function shouldSkipTextNode(node: Text): boolean {
+function shouldSkipTextNode(node: Text, options: RenderDomOptions): boolean {
   let parent = node.parentElement;
 
   while (parent) {
     const tag = parent.tagName.toLowerCase();
 
-    if (SKIPPED_TAGS.has(tag) || parent.classList.contains("cm-editor")) {
+    if (SKIPPED_TAGS.has(tag) || (!options.allowInsideCmEditor && parent.classList.contains("cm-editor"))) {
       return true;
     }
 
